@@ -1,42 +1,14 @@
 var defaultThreads = [
     {
         id: 1,
-        title: "Thread 1",
-        author: "Aaron",
+        title: "New Video! ME VS SONIC!",
+        author: "Guest",
         date: Date.now(),
-        content: "Thread content",
+        content: "Sup! I made a new video! Go check it out here: https://www.youtube.com/shorts/Xz33a1Scy6Q",
         comments: [
-            {
-                author: "Jack",
-                date: Date.now(),
-                content: "Hey there"
-            },
-            {
-                author: "Arthur",
-                date: Date.now(),
-                content: "Hey to you too"
-            }
+            
         ]
     },
-    {
-        id: 2,
-        title: "Thread 2",
-        author: "Aaron",
-        date: Date.now(),
-        content: "Thread content 2",
-        comments: [
-            {
-                author: "Jack",
-                date: Date.now(),
-                content: "Hey there"
-            },
-            {
-                author: "Arthur",
-                date: Date.now(),
-                content: "Hey to you too"
-            }
-        ]
-    }
 ]
 
 var threads = defaultThreads
