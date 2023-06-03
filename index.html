@@ -21,14 +21,15 @@
         date: date
       };
 
-      allPosts.push(post);
-      savePostsToLocalStorage(allPosts);
-      displayPosts(allPosts);
+      savePostToAPI(post, function(savedPost) {
+        allPosts.push(savedPost);
+        displayPosts(allPosts);
 
-      // Clear form inputs
-      document.getElementById("post-title").value = "";
-      document.getElementById("post-content").value = "";
-      document.getElementById("post-author").value = "";
+        // Clear form inputs
+        document.getElementById("post-title").value = "";
+        document.getElementById("post-content").value = "";
+        document.getElementById("post-author").value = "";
+      });
     }
 
     function searchPosts() {
@@ -79,21 +80,37 @@
       }
     }
 
-    function savePostsToLocalStorage(posts) {
-      localStorage.setItem("forumPosts", JSON.stringify(posts));
+    function savePostToAPI(post, callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "https://jsonplaceholder.typicode.com/posts", true);
+      xhr.setRequestHeader("Content-type", "application/json");
+      xhr.onload = function() {
+        if (xhr.status === 201) {
+          var savedPost = JSON.parse(xhr.responseText);
+          callback(savedPost);
+        }
+      };
+      xhr.send(JSON.stringify(post));
     }
 
-    function retrievePostsFromLocalStorage() {
-      var savedPosts = localStorage.getItem("forumPosts");
-      if (savedPosts) {
-        allPosts = JSON.parse(savedPosts);
-      }
+    function fetchPostsFromAPI(callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "https://jsonplaceholder.typicode.com/posts", true);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var posts = JSON.parse(xhr.responseText);
+          callback(posts);
+        }
+      };
+      xhr.send();
     }
 
-    // Retrieve posts from Local Storage on page load
+    // Retrieve posts from the API on page load
     document.addEventListener("DOMContentLoaded", function() {
-      retrievePostsFromLocalStorage();
-      displayPosts(allPosts);
+      fetchPostsFromAPI(function(posts) {
+        allPosts = posts;
+        displayPosts(allPosts);
+      });
     });
   </script>
 </head>
@@ -118,11 +135,5 @@
     <h2>Search posts</h2>
     <input type="text" id="search-input" oninput="searchPosts()" placeholder="Search by title...">
   </div>
-
-  <script>
-    // Add event listener to the form submit button
-    var form = document.querySelector("form");
-    form.addEventListener("submit", submitPost);
-  </script>
 </body>
 </html>
