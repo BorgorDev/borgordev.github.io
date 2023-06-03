@@ -1,24 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Centered Title</title>
+    <title>BorgorDev Forum</title>
     <style>
         body {
             margin: 0;
             padding: 0;
+            display: flex;
+        }
+
+        .menu {
+            width: 200px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+
+        .menu a {
+            display: block;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #333333;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
         }
 
         .title {
             text-align: center;
-            margin-top: 20px; /* Adjust the top margin as needed */
             font-size: 24px;
             font-weight: bold;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="title">
-        <h1>BorgorDev Forum</h1>
+    <div class="menu">
+        <a href="page1.html">Page 1</a>
+        <a href="page2.html">Page 2</a>
+        <a href="page3.html">Page 3</a>
+        <!-- Add more menu items as needed -->
+    </div>
+    <div class="content">
+        <div class="title">
+            <h1>BorgorDev Forum</h1>
+        </div>
+        <!-- Add content of the current page here -->
     </div>
 </body>
 </html>
