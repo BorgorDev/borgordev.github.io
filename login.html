@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Borgor Chat</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 300px;
+      padding: 16px;
+      margin-top: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .green-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .red-button {
+      background-color: #f44336;
+      color: white;
+      width: 3%;
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 8px 16px;
+    }
+
+    .chat-container {
+      width: 400px;
+      padding: 16px;
+      margin-top: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .chat-messages {
+      margin-bottom: 10px;
+    }
+
+    .chat-input {
+      width: 100%;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="login-page">
+  <h2>Login Form</h2>
+  <div class="container">
+    <label for="login-username"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="login-username" required>
+
+    <label for="login-password"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="login-password" required>
+
+    <button type="submit" onclick="login()" class="green-button">Login</button>
+    <button onclick="showSignupForm()" class="green-button">Signup</button>
+  </div>
+</div>
+
+<div id="welcome-page" style="display: none;">
+  <div id="welcome-container">
+    <h2>Welcome User!</h2>
+    <p> </p>
+    <button class="logout-btn red-button" onclick="logout()">Logout</button>
+
+    <div class="chat-container">
+      <div class="chat-messages" id="chat-messages"></div>
+      <input type="text" class="chat-input" id="chat-input" placeholder="Type your message..." />
+      <button onclick="sendMessage()" class="green-button">Send</button>
+    </div>
+  </div>
+</div>
+
+<div id="signup-page" style="display: none;">
+  <h2>Signup Form</h2>
+  <div class="container">
+    <label for="signup-username"><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="signup-username" required>
+
+    <label for="signup-password"><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="signup-password" required>
+
+    <button type="submit" onclick="signup()" class="green-button">Signup</button>
+  </div>
+</div>
+
+<script>
+  var maxChatMessages = 4;
+
+  function login() {
+    var username = document.querySelector('input[name="login-username"]').value;
+    var password = document.querySelector('input[name="login-password"]').value;
+
+    var savedUsers = JSON.parse(localStorage.getItem('users'));
+    if (savedUsers) {
+      var user = savedUsers.find(function(user) {
+        return user.username === username && user.password === password;
+      });
+
+      if (user) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', username);
+        showWelcomePage();
+      } else {
+        alert('Invalid username or password.');
+      }
+    } else {
+      alert('No users found. Please signup first.');
+    }
+  }
+
+  function showWelcomePage() {
+    var isLoggedIn = localStorage.getItem('isLoggedIn');
+    var username = localStorage.getItem('username');
+
+    if (isLoggedIn === 'true') {
+      document.getElementById('login-page').style.display = 'none';
+      document.getElementById('signup-page').style.display = 'none';
+      document.getElementById('welcome-page').style.display = 'block';
+      document.getElementById('welcome-page').innerHTML = `
+        <div id="welcome-container">
+          <h2>Welcome ${username}!</h2>
+          <p> </p>
+          <button class="logout-btn red-button" onclick="logout()">Logout</button>
+
+          <div class="chat-container">
+            <div class="chat-messages" id="chat-messages"></div>
+            <input type="text" class="chat-input" id="chat-input" placeholder="Type your message..." />
+            <button onclick="sendMessage()" class="green-button">Send</button>
+          </div>
+        </div>
+      `;
+      loadChatMessages();
+    } else {
+      document.getElementById('login-page').style.display = 'block';
+      document.getElementById('signup-page').style.display = 'none';
+      document.getElementById('welcome-page').style.display = 'none';
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
+    showWelcomePage();
+  }
+
+  function showSignupForm() {
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('signup-page').style.display = 'block';
+    document.getElementById('welcome-page').style.display = 'none';
+  }
+
+  function signup() {
+    var username = document.querySelector('input[name="signup-username"]').value;
+    var password = document.querySelector('input[name="signup-password"]').value;
+
+    var savedUsers = JSON.parse(localStorage.getItem('users')) || [];
+    savedUsers.push({ username: username, password: password });
+
+    localStorage.setItem('users', JSON.stringify(savedUsers));
+
+    document.querySelector('input[name="signup-username"]').value = '';
+    document.querySelector('input[name="signup-password"]').value = '';
+
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('username', username);
+
+    showWelcomePage();
+  }
+
+  function sendMessage() {
+    var messageInput = document.getElementById('chat-input');
+    var message = messageInput.value;
+
+    if (message.trim() !== '') {
+      var chatMessages = document.getElementById('chat-messages');
+      var username = localStorage.getItem('username');
+
+      var messageElement = document.createElement('p');
+      messageElement.textContent = username + ': ' + message;
+      chatMessages.appendChild(messageElement);
+
+      messageInput.value = '';
+      messageInput.focus();
+
+      saveChatMessages();
+    }
+  }
+
+  function loadChatMessages() {
+    var chatMessages = document.getElementById('chat-messages');
+    chatMessages.innerHTML = '';
+
+    var storedMessages = localStorage.getItem('chat-messages');
+    if (storedMessages) {
+      var messages = JSON.parse(storedMessages);
+
+      if (messages.length > maxChatMessages) {
+        messages = messages.slice(messages.length - maxChatMessages);
+      }
+
+      messages.forEach(function(message) {
+        var messageElement = document.createElement('p');
+        messageElement.textContent = message;
+        chatMessages.appendChild(messageElement);
+      });
+    }
+  }
+
+  function saveChatMessages() {
+    var chatMessages = document.getElementById('chat-messages');
+    var messages = [];
+
+    for (var i = 0; i < chatMessages.children.length; i++) {
+      var message = chatMessages.children[i].textContent;
+      messages.push(message);
+    }
+
+    localStorage.setItem('chat-messages', JSON.stringify(messages));
+  }
+
+  window.addEventListener('DOMContentLoaded', showWelcomePage);
+</script>
+
+</body>
+</html>
