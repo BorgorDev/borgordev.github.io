@@ -1,0 +1,16 @@
+{
+  "name": "Easy Apps",
+  "identifier": "com.easy.apps",
+  "subtitle": "This repo has some cool stuff!",
+  "description": "Welcome to Easy Apps! Here you'll find very good apps for your iOS device!",
+  "iconURL": "https://example.com/source_icon.png",
+  "headerURL": "https://example.com/source_header.png",
+  "website": "https://example.com",
+  "tintColor": "#F54F32",
+  "featuredApps": [
+    "com.example.myapp",
+    "com.example.anotherapp"
+  ],
+  "apps": [],
+  "news": [],
+}
