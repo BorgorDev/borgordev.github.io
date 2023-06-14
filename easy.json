@@ -13,11 +13,11 @@
   ],
 "apps": [
     {
-        "name": "My Example App",
-        "bundleIdentifier": "com.example.myapp",
-        "developerName": "Example Developer",
-        "subtitle": "An awesome app.",
-        "localizedDescription": "This is an awesome app only available on AltStore.",
+        "name": "unc0ver",
+        "bundleIdentifier": "com.easy.unc0ver",
+        "developerName": "Easy Apps",
+        "subtitle": "Jailbreak for ios 11 to 14!",
+        "localizedDescription": "This is the unc0ver jailbreak.",
         "iconURL": "https://example.com/myapp_icon.png",
         "tintColor": "#F54F32",
         "screenshotURLs": [
