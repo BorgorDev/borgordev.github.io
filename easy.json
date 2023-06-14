@@ -24,6 +24,9 @@
             "https://example.com/myapp_screenshot1.png",
             "https://example.com/myapp_screenshot2.png",
             "https://example.com/myapp_screenshot3.png"
-        ]
+        ],
+        "versions": [],
+        "appPermissions": {},
+  },
   "news": [],
 }
